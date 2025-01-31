@@ -13,6 +13,9 @@ func main() {
 	todos.add("por fim mais")
 	fmt.Println(todos)
 	todos.markDone(0)
-	todos.remove(1)
-	fmt.Println(todos)
+	todos.edit(1, "decidi mudar")
+	//todos.remove(1)
+
+	//todos.clear()
+	todos.print()
 }

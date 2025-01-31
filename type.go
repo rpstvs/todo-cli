@@ -1,5 +1,12 @@
 package main
 
+import (
+	"os"
+	"strconv"
+
+	"github.com/aquasecurity/table"
+)
+
 type Todo struct {
 	task string
 	done bool
@@ -41,5 +48,29 @@ func (todos *Todos) edit(id int, task string) {
 	t := *todos
 
 	t[id].task = task
+
+}
+
+func (todos *Todos) clear() {
+	*todos = nil
+}
+
+func (todos *Todos) print() {
+	table := table.New(os.Stdout)
+	table.SetRowLines(false)
+	table.SetHeaders("ID", "Title", "Completed")
+
+	for index, t := range *todos {
+		completed := "❌"
+
+		if t.done {
+			completed = "✅"
+		}
+
+		table.AddRow(strconv.Itoa(index), t.task, completed)
+
+	}
+
+	table.Render()
 
 }
