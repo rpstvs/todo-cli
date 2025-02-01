@@ -1,21 +1,21 @@
 package main
 
-import (
-	"fmt"
-)
+import "log"
 
 func main() {
 
 	todos := Todos{}
+	storage := NewStorage[Todos]("todos.json")
+	err := storage.Load(&todos)
+	if err != nil {
+		log.Fatal(err)
+	}
+	processArgs(&todos)
 
-	todos.add("add cenas")
-	todos.add("mais cenas")
-	todos.add("por fim mais")
-	fmt.Println(todos)
-	todos.markDone(0)
-	todos.edit(1, "decidi mudar")
-	//todos.remove(1)
+	err = storage.Save(todos)
 
-	//todos.clear()
-	todos.print()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 }

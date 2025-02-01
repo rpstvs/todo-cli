@@ -8,18 +8,16 @@ import (
 )
 
 type Todo struct {
-	task string
-	done bool
+	Task string `json:"task"`
+	Done bool   `json:"done"`
 }
 
 type Todos []Todo
 
-var tasks map[int]Todo
-
 func (todos *Todos) add(message string) {
 	todo := Todo{
-		task: message,
-		done: false,
+		Task: message,
+		Done: false,
 	}
 
 	*todos = append(*todos, todo)
@@ -35,10 +33,10 @@ func (todos *Todos) remove(id int) {
 func (todos *Todos) markDone(id int) {
 	t := *todos
 
-	isCompleted := t[id].done
+	isCompleted := t[id].Done
 
 	if !isCompleted {
-		t[id].done = true
+		t[id].Done = true
 
 	}
 
@@ -47,7 +45,7 @@ func (todos *Todos) markDone(id int) {
 func (todos *Todos) edit(id int, task string) {
 	t := *todos
 
-	t[id].task = task
+	t[id].Task = task
 
 }
 
@@ -63,11 +61,11 @@ func (todos *Todos) print() {
 	for index, t := range *todos {
 		completed := "❌"
 
-		if t.done {
+		if t.Done {
 			completed = "✅"
 		}
 
-		table.AddRow(strconv.Itoa(index), t.task, completed)
+		table.AddRow(strconv.Itoa(index), t.Task, completed)
 
 	}
 
