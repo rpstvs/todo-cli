@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"log"
 	"os"
@@ -16,12 +15,9 @@ type Command struct {
 }
 
 func processArgs(todos *Todos) {
-	scanner := bufio.NewScanner(os.Stdin)
 
-	scanner.Scan()
-
-	words := cleanInput(scanner.Text())
-
+	words := cleanInput(os.Args[1:])
+	fmt.Println(words)
 	if len(words) == 0 {
 		log.Println("No command, exiting app...")
 		return
@@ -29,17 +25,19 @@ func processArgs(todos *Todos) {
 	}
 
 	command, exists := getCommand()[words[0]]
-
+	task := getMessage(words[1:])
 	if exists {
-		command.callback(todos, words[1:]...)
+		command.callback(todos, task)
 	} else {
 		log.Println("unknown command")
 	}
 }
 
-func cleanInput(text string) []string {
-	output := strings.ToLower(text)
-	words := strings.Fields(output)
+func cleanInput(text []string) []string {
+	var words []string
+	for _, field := range text {
+		words = append(words, strings.ToLower(field))
+	}
 	return words
 }
 
@@ -74,7 +72,8 @@ func getCommand() map[string]Command {
 }
 
 func commandAdd(todos *Todos, args ...string) {
-	todos.add(args[0])
+	task := getMessage(args)
+	todos.add(task)
 	todos.print()
 }
 
@@ -108,4 +107,9 @@ func commandDone(todos *Todos, args ...string) {
 
 func commandClear(todos *Todos, args ...string) {
 	todos.clear()
+}
+
+func getMessage(msg []string) string {
+	task := strings.Join(msg, " ")
+	return task
 }
