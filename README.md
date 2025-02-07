@@ -35,11 +35,11 @@ todo-cli done <id>
 print - lists the tasks
 
 ```go
-todo-cli done <id>
+todo-cli print
 ```
 
 help - lists the available commands
 
 ```go
-todo-cli done <id>
+todo-cli help
 ```
