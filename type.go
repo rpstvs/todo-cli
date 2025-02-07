@@ -54,21 +54,28 @@ func (todos *Todos) clear() {
 }
 
 func (todos *Todos) print() {
-	table := table.New(os.Stdout)
-	table.SetRowLines(false)
-	table.SetHeaders("ID", "Title", "Completed")
+	table1 := table.New(os.Stdout)
+	table2 := table.New(os.Stdout)
+	table1.SetRowLines(false)
+	table2.SetRowLines(false)
+	table1.SetHeaders("ID", "Title", "Completed")
+	table2.SetHeaders("ID", "Title", "Completed")
 
 	for index, t := range *todos {
 		completed := "❌"
 
 		if t.Done {
 			completed = "✅"
+			table2.AddRow(strconv.Itoa(index), t.Task, completed)
+			continue
+
 		}
 
-		table.AddRow(strconv.Itoa(index), t.Task, completed)
+		table1.AddRow(strconv.Itoa(index), t.Task, completed)
 
 	}
 
-	table.Render()
+	table1.Render()
+	table2.Render()
 
 }

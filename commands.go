@@ -17,7 +17,7 @@ type Command struct {
 func processArgs(todos *Todos) {
 
 	words := cleanInput(os.Args[1:])
-	fmt.Println(words)
+
 	if len(words) == 0 {
 		log.Println("No command, exiting app...")
 		return
@@ -26,6 +26,7 @@ func processArgs(todos *Todos) {
 
 	command, exists := getCommand()[words[0]]
 	task := getMessage(words[1:])
+	fmt.Println(task)
 	if exists {
 		command.callback(todos, task)
 	} else {
@@ -68,6 +69,25 @@ func getCommand() map[string]Command {
 			desc:     "clears the list",
 			callback: commandClear,
 		},
+		"print": {
+			name:     "print",
+			desc:     "prints the list of tasks",
+			callback: commandPrint,
+		},
+		"help": {
+			name:     "help",
+			desc:     "Lists the commands available",
+			callback: commandHelp,
+		},
+	}
+}
+func commandPrint(todos *Todos, args ...string) {
+	todos.print()
+}
+
+func commandHelp(todos *Todos, args ...string) {
+	for _, cmd := range getCommand() {
+		fmt.Printf("%s: %s\n", cmd.name, cmd.desc)
 	}
 }
 
@@ -84,15 +104,18 @@ func commandRemove(todos *Todos, args ...string) {
 		log.Fatal("couldnt convert to id")
 	}
 	todos.remove(id)
+	todos.print()
 }
 
 func commandEdit(todos *Todos, args ...string) {
-	id, err := strconv.Atoi(args[0])
+	id, err := strconv.Atoi(args[1])
+	fmt.Println(args[1])
 	if err != nil {
 		log.Fatal("couldnt convert to id")
 	}
-
-	todos.edit(id, args[1])
+	task := getMessage(args[2:])
+	todos.edit(id, task)
+	todos.print()
 }
 
 func commandDone(todos *Todos, args ...string) {
