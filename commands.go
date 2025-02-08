@@ -26,7 +26,7 @@ func processArgs(todos *Todos) {
 
 	command, exists := getCommand()[words[0]]
 	task := getMessage(words[1:])
-	fmt.Println(task)
+
 	if exists {
 		command.callback(todos, task)
 	} else {
@@ -69,6 +69,11 @@ func getCommand() map[string]Command {
 			desc:     "clears the list",
 			callback: commandClear,
 		},
+		"clearCompleted": {
+			name:     "clearCompleted",
+			desc:     "clears the list of completed tasks",
+			callback: commandClearCompleted,
+		},
 		"print": {
 			name:     "print",
 			desc:     "prints the list of tasks",
@@ -109,7 +114,7 @@ func commandRemove(todos *Todos, args ...string) {
 
 func commandEdit(todos *Todos, args ...string) {
 	id, err := strconv.Atoi(args[1])
-	fmt.Println(args[1])
+
 	if err != nil {
 		log.Fatal("couldnt convert to id")
 	}
@@ -120,7 +125,6 @@ func commandEdit(todos *Todos, args ...string) {
 
 func commandDone(todos *Todos, args ...string) {
 	id, err := strconv.Atoi(args[0])
-	fmt.Println("estou a entrar aqui")
 	if err != nil {
 		log.Fatal("couldnt convert to id")
 	}
@@ -130,6 +134,14 @@ func commandDone(todos *Todos, args ...string) {
 
 func commandClear(todos *Todos, args ...string) {
 	todos.clear()
+}
+
+func commandClearCompleted(todos *Todos, args ...string) {
+	for i, todo := range *todos {
+		if todo.Done {
+			todos.remove(i)
+		}
+	}
 }
 
 func getMessage(msg []string) string {
