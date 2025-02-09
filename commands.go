@@ -113,12 +113,13 @@ func commandRemove(todos *Todos, args ...string) {
 }
 
 func commandEdit(todos *Todos, args ...string) {
-	id, err := strconv.Atoi(args[1])
+	words := strings.Fields(args[0])
+	id, err := strconv.Atoi(words[0])
 
 	if err != nil {
 		log.Fatal("couldnt convert to id")
 	}
-	task := getMessage(args[2:])
+	task := getMessage(words[1:])
 	todos.edit(id, task)
 	todos.print()
 }
