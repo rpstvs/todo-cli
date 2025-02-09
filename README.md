@@ -38,6 +38,12 @@ print - lists the tasks
 todo-cli print
 ```
 
+edit - edits a task
+
+```go
+todo-cli edit <id> <task>
+```
+
 help - lists the available commands
 
 ```go
